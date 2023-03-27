@@ -9,62 +9,65 @@ import plotly as plt
 import plotly.express as px
 import plotly.graph_objects as go
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from dash.dependencies import Input, Output, State, ClientsideFunction
-import dash_table
+from dash import dash_table
 import base64
 import os
 import clean_database
 
-# Set some custom pandas options
-pd.set_option('max_columns', None)
-pd.set_option('max_colwidth', 100)
-pd.options.display.width = None
+# # Set some custom pandas options
+# pd.set_option('max_columns', None)
+# pd.set_option('max_colwidth', 100)
+# pd.options.display.width = None
 
-def gsheet_api_check(SCOPES):
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
-    return creds
+# def gsheet_api_check(SCOPES):
+#     creds = None
+#     if os.path.exists('token.pickle'):
+#         with open('token.pickle', 'rb') as token:
+#             creds = pickle.load(token)
+#     if not creds or not creds.valid:
+#         if creds and creds.expired and creds.refresh_token:
+#             creds.refresh(Request())
+#         else:
+#             flow = InstalledAppFlow.from_client_secrets_file(
+#                 'credentials.json', SCOPES)
+#             creds = flow.run_local_server(port=0)
+#         with open('token.pickle', 'wb') as token:
+#             pickle.dump(creds, token)
+#     return creds
 
-def pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL):
-    creds = gsheet_api_check(SCOPES)
-    service = build('sheets', 'v4', credentials=creds)
-    sheet = service.spreadsheets()
-    result = sheet.values().get(
-        spreadsheetId=SPREADSHEET_ID,
-        range=DATA_TO_PULL).execute()
-    values = result.get('values', [])
+# def pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL):
+#     creds = gsheet_api_check(SCOPES)
+#     service = build('sheets', 'v4', credentials=creds)
+#     sheet = service.spreadsheets()
+#     result = sheet.values().get(
+#         spreadsheetId=SPREADSHEET_ID,
+#         range=DATA_TO_PULL).execute()
+#     values = result.get('values', [])
 
-    if not values:
-        print('No data found.')
-    else:
-        rows = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
-                                  range=DATA_TO_PULL).execute()
-        data = rows.get('values')
-        print("COMPLETE: Data copied")
-        return data
+#     if not values:
+#         print('No data found.')
+#     else:
+#         rows = sheet.values().get(spreadsheetId=SPREADSHEET_ID,
+#                                   range=DATA_TO_PULL).execute()
+#         data = rows.get('values')
+#         print("COMPLETE: Data copied")
+#         return data
 
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SPREADSHEET_ID = '1KkIjyL4YTZvGnszXl_AH3D4QaYKiiKKqzq4QjGAt5hQ'
-DATA_TO_PULL = 'All Rarity'
-data = pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL)
+# SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+# SPREADSHEET_ID = '1KkIjyL4YTZvGnszXl_AH3D4QaYKiiKKqzq4QjGAt5hQ'
+# DATA_TO_PULL = 'All Rarity'
+# data = pull_sheet_data(SCOPES,SPREADSHEET_ID,DATA_TO_PULL)
 
-#Get dataframe
-dqt = pd.DataFrame(data[1:], columns=data[1])
-dqt = clean_database.clean_database(dqt)
-print(dqt)
+dqt = pd.read_csv('unit_database_cleaned_new.csv')
+
+# Get dataframe
+# dqt = pd.DataFrame(data, columns=data.columns)
+
+# dqt = clean_database.clean_database(data)
+# print(dqt)
 
 """
 # Set our file path

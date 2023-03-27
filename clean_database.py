@@ -1,9 +1,9 @@
 import pandas as pd
 
 ## Viewing Options for pandas in terminal
-pd.set_option('max_columns', None)
-pd.set_option('max_colwidth', 100)
-pd.options.display.width = None
+# pd.set_option('max_columns', 100)
+# pd.set_option('max_colwidth', 100)
+# pd.options.display.width = 1000
 
 def clean_database(dqt):
 
