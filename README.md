@@ -8,7 +8,7 @@ The dashboard features a range of interactive visualizations that allow players 
 
 The tool is also equipped with advanced filtering and search capabilities, allowing players to easily find the units they're looking for and compare them with others. This feature is particularly useful for players who are trying to build the most effective teams and want to quickly identify the units that are best suited for their needs.
 
-![Example Dashboard](img/example.png) 
+![Example Dashboard](example.png) 
 
 ### Features
  - Filters for rarity, family, attacking element, defensive stats
